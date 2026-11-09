@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kilómetros con historia</title>
+  <style>
+    :root {
+      /* Paleta verdes apagados (salvia / musgo / eucalipto) */
+      --verde-oscuro: #1f3a2f;  /* bosque profundo: hero, títulos */
+      --verde-medio:  #4f7a63;  /* musgo: acentos */
+      --lima:         #b9cca4;  /* salvia clara: borde tarjeta, span del h1 */
+      --menta:        #eef3ec;  /* fondo general */
+      --tinta:        #17241e;  /* texto */
+      --gris:         #5b6b62;  /* texto secundario */
+
+      /* Series del gráfico (oscuro → claro) */
+      --serie-1: #2f4f3e;  /* Cycling  */
+      --serie-2: #5a7d66;  /* Running  */
+      --serie-3: #8fae94;  /* Swimming */
+      --serie-4: #c4d6c0;  /* Walking  */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--menta);
+      color: var(--tinta);
+      font-family: "Comic Sans MS", "Comic Sans", "Comic Neue", cursive;
+    }
+    .hero {
+      background: var(--verde-oscuro);
+      color: #fff;
+      padding: 72px 24px 96px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -40px; top: -40px;
+      width: 260px; height: 260px;
+      background: var(--lima);
+      opacity: .18;
+      clip-path: polygon(100% 0, 100% 100%, 0 0);
+    }
+    .contenido { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; text-align: center; }
+    h1 {
+      font-family: "Comic Sans MS", "Comic Sans", "Comic Neue", cursive;
+      font-weight: 700;
+      font-size: clamp(36px, 7.2vw, 84px);
+      line-height: 1;
+      margin: 0 0 16px;
+      text-transform: uppercase;
+      letter-spacing: -.01em;
+      text-wrap: balance;
+      overflow-wrap: anywhere;
+    }
+    h1 span { color: var(--lima); }
+    .subtitulo {
+      font-size: 14px;
+      line-height: 1.45;
+      max-width: 680px;
+      margin: 0 auto;
+      color: #dbe6dc;
+    }
+    main {
+      max-width: 1110px;
+      margin: -56px auto 0;
+      padding: 0 24px 72px;
+      position: relative;
+      z-index: 2;
+    }
+    .tarjeta {
+      background: #fff;
+      padding: 28px;
+      box-shadow: 0 12px 30px rgba(31, 58, 47, .12);
+      border-top: 6px solid var(--lima);
+    }
+    .tarjeta h2 {
+      margin: 0 0 4px;
+      font-family: "Comic Sans MS", "Comic Sans", "Comic Neue", cursive;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--verde-oscuro);
+    }
+    .tarjeta .sub { margin: 0 0 18px; color: var(--gris); font-size: 14px; }
+    .pie { color: var(--gris); font-size: 14px; line-height: 1.5; margin: 18px 0 0; }
+
+    /* Gráfico: ocupa el ancho de la tarjeta y escala proporcional */
+    .grafico { width: 100%; aspect-ratio: 1005 / 600; }
+    .grafico svg, .grafico object, .tarjeta img { width: 100%; height: auto; display: block; }
+
+    /* Recolor del SVG inline (barras + leyenda) */
+    .grafico #Cycling                         { fill: var(--serie-1); }
+    .grafico #Running                         { fill: var(--serie-2); }
+    .grafico #Swimming                        { fill: var(--serie-3); }
+    .grafico #Walking                         { fill: var(--serie-4); }
+    .grafico .cell:nth-child(1) .swatch       { fill: var(--serie-1) !important; }
+    .grafico .cell:nth-child(2) .swatch       { fill: var(--serie-2) !important; }
+    .grafico .cell:nth-child(3) .swatch       { fill: var(--serie-3) !important; }
+    .grafico .cell:nth-child(4) .swatch       { fill: var(--serie-4) !important; }
+    .grafico #viz rect                        { stroke: #fff; stroke-width: 1; }
+    .grafico #xAxis, .grafico #yAxis          { color: var(--gris); }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="contenido">
+      <h1>Kilómetros <span>con historia</span></h1>
+      <p class="subtitulo">Un poco de mi historia en los tres últimos años: caminatas, carreras, bici y natación;
+        guardado en mi reloj, contado en mi dashboard.</p>
+    </div>
+  </section>
+
+  <main>
+    <article class="tarjeta">
+      <h2>Estos son los kilometros anuales por tipo de actividad</h2>
+      <p class="pie"></p>
+      <div class="grafico" data-src="grafico01.svg"></div>
+    </article>
+  </main>
+
+  <script>
+    // Inserta el SVG inline: permite escalarlo (viewBox) y recolorearlo con CSS.
+    document.querySelectorAll('.grafico[data-src]').forEach(async (cont) => {
+      const src = cont.dataset.src;
+      try {
+        const txt = await fetch(src).then(r => { if (!r.ok) throw r.status; return r.text(); });
+        cont.innerHTML = txt;
+        const svg = cont.querySelector('svg');
+        const w = svg.getAttribute('width') || 1005, h = svg.getAttribute('height') || 600;
+        if (!svg.hasAttribute('viewBox')) svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        svg.removeAttribute('width');
+        svg.removeAttribute('height');
+        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+        cont.style.aspectRatio = `${w} / ${h}`;
+      } catch (e) {
+        // Fallback (p.ej. abierto con file://): object sin recolor
+        cont.innerHTML = `<object type="image/svg+xml" data="${src}"></object>`;
+      }
+    });
+  </script>
+</body>
+</html>
