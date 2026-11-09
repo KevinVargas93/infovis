@@ -42,10 +42,11 @@
       font-weight: 700;
       font-size: clamp(36px, 7.2vw, 84px);
       line-height: 1;
-      white-space: nowrap;
       margin: 0 0 16px;
       text-transform: uppercase;
       letter-spacing: -.01em;
+      text-wrap: balance;      /* reparte el texto en líneas parejas */
+      overflow-wrap: anywhere; /* evita desbordes en móvil */
     }
     h1 span { color: var(--lima); }
     .subtitulo {
