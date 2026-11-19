@@ -87,7 +87,7 @@
     .pie { color: var(--gris); font-size: 24px; line-height: 1.5; margin: 18px 0 0; }
 
     /* Gráfico: ocupa el ancho de la tarjeta y escala proporcional */
-    .grafico { width: 100%; aspect-ratio: 1005 / 600; }
+    .grafico { width: 100%; aspect-ratio: 1005 / 320; }
     .grafico svg, .grafico object, .tarjeta img { width: 100%; height: auto; display: block; }
 
     /* Recolor del SVG inline (barras + leyenda) */
@@ -128,7 +128,7 @@
         const txt = await fetch(src).then(r => { if (!r.ok) throw r.status; return r.text(); });
         cont.innerHTML = txt;
         const svg = cont.querySelector('svg');
-        const w = svg.getAttribute('width') || 1005, h = svg.getAttribute('height') || 600;
+        const w = svg.getAttribute('width') || 1005, h = svg.getAttribute('height') || 320;
         if (!svg.hasAttribute('viewBox')) svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
         svg.removeAttribute('width');
         svg.removeAttribute('height');
