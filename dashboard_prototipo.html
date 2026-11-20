@@ -104,6 +104,9 @@
 
     /* Segunda tarjeta (Flourish) */
     .tarjeta + .tarjeta { margin-top: 28px; }
+    /* Flourish: mismo ancho y alto que el gráfico de barras */
+    .grafico-flourish { width: 100%; }
+    .grafico-flourish iframe { height: auto !important; aspect-ratio: 1005 / 320; display: block; }
   </style>
 </head>
 <body>
@@ -124,7 +127,7 @@
 
     <article class="tarjeta tarjeta-flourish">
       <!-- Gráfico Flourish: Mi semana en movimiento -->
-      <section class="grafico-flourish" style="max-width:900px;margin:0 auto;">
+      <section class="grafico-flourish">
         <div class="flourish-embed flourish-chart" data-src="story/3863843"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/story/3863843/thumbnail" width="100%" alt="Mi semana en movimiento: entrenamientos por día de la semana y tipo de actividad" /></noscript></div>
       </section>
     </article>
