@@ -104,6 +104,12 @@
 
     /* Segunda tarjeta (Flourish) */
     .tarjeta + .tarjeta { margin-top: 28px; }
+
+    /* Leyenda del gráfico de barras (debajo del título) */
+    .leyenda { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; margin: 8px 0 10px; font-size: 13px; color: var(--tinta); }
+    .leyenda strong { color: var(--verde-oscuro); }
+    .leyenda .item { display: inline-flex; align-items: center; gap: 6px; }
+    .leyenda i { width: 12px; height: 12px; display: inline-block; }
   </style>
 </head>
 <body>
@@ -118,6 +124,13 @@
   <main>
     <article class="tarjeta">
       <h2>Estos son los kilometros anuales por tipo de actividad</h2>
+      <div class="leyenda">
+        <strong>Tipos de entrenamiento:</strong>
+        <span class="item"><i style="background: var(--serie-1)"></i>Cycling</span>
+        <span class="item"><i style="background: var(--serie-2)"></i>Running</span>
+        <span class="item"><i style="background: var(--serie-3)"></i>Swimming</span>
+        <span class="item"><i style="background: var(--serie-4)"></i>Walking</span>
+      </div>
       <p class="pie"></p>
       <div class="grafico" data-src="grafico01.svg"></div>
     </article>
